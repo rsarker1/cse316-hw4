@@ -261,6 +261,11 @@ input {
   color: var(--swatch-neutral);
 }
 
+span {
+  font-weight: bolder;
+  font-style: italic;
+}
+
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
 
 .modal {
