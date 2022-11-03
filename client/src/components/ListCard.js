@@ -17,8 +17,8 @@ import TextField from '@mui/material/TextField';
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
-    const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
+    const { idNamePair } = props;
+    const [text, setText] = useState(idNamePair.name);
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -49,8 +49,6 @@ function ListCard(props) {
 
     async function handleDeleteList(event, id) {
         event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
         store.markListForDeletion(id);
     }
 
@@ -63,15 +61,6 @@ function ListCard(props) {
     }
     function handleUpdateText(event) {
         setText(event.target.value);
-    }
-
-    let selectClass = "unselected-list-card";
-    if (selected) {
-        selectClass = "selected-list-card";
-    }
-    let cardStatus = false;
-    if (store.isListNameEditActive) {
-        cardStatus = true;
     }
     let cardElement =
         <ListItem
