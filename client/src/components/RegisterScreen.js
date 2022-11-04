@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AuthContext from '../auth'
 import Copyright from './Copyright'
 
@@ -12,9 +12,12 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { Alert, Modal } from '@mui/material';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -24,13 +27,20 @@ export default function RegisterScreen() {
             formData.get('lastName'),
             formData.get('email'),
             formData.get('password'),
-            formData.get('passwordVerify')
+            formData.get('passwordVerify'),
+            setOpen,
+            setMsg,
         );
     };
 
     return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                <Modal open={open} variant='filled'>
+                    <Alert severity='error' onClose={() => setOpen(false)}>
+                        {msg}
+                    </Alert>
+                </Modal>
                 <Box
                     sx={{
                         marginTop: 8,

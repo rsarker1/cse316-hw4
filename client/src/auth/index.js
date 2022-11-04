@@ -69,29 +69,55 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.REGISTER_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/login");
-        }
-    }
+    // auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    //     const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
+    //     if (response.status === 200) {
+    //         authReducer({
+    //             type: AuthActionType.REGISTER_USER,
+    //             payload: {
+    //                 user: response.data.user
+    //             }
+    //         })
+    //         history.push("/login");
+    //     }
+    // }
 
-    auth.loginUser = async function(email, password) {
-        const response = await api.loginUser(email, password);
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
+    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify, setOpen, setMsg) {
+        api.registerUser(firstName, lastName, email, password, passwordVerify)
+        .then(
+            (response) => {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            },
+            (err) => {
+                console.log("Register error\n")
+                setMsg(err.response.data.errorMessage);
+                setOpen(true);
+            }
+        )
+    }
+    auth.loginUser = async function(email, password, setOpen, setMsg) {
+        try{
+            const response = await api.loginUser(email, password);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            }
+        }
+        catch (err) {
+            console.log("Login error\n")
+            setMsg(err.response.data.errorMessage);
+            setOpen(true);
         }
     }
 
