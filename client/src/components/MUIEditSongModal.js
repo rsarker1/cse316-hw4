@@ -3,6 +3,7 @@ import GlobalStoreContext from '../store';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import { Button, TextField, Typography } from '@mui/material';
 
 const style = {
     position: 'absolute',
@@ -22,7 +23,8 @@ export default function MUIEditSongModal() {
     const [ artist, setArtist ] = useState(store.currentSong.artist);
     const [ youTubeId, setYouTubeId ] = useState(store.currentSong.youTubeId);
 
-    function handleConfirmEditSong() {
+    function handleConfirmEditSong(event) {
+        event.preventDefault();
         let newSongData = {
             title: title,
             artist: artist,
@@ -33,6 +35,9 @@ export default function MUIEditSongModal() {
 
     function handleCancelEditSong() {
         store.hideModals();
+        setTitle(store.currentSong.title);
+        setArtist(store.currentSong.artist);
+        setYouTubeId(store.currentSong.youTubeId);
     }
 
     function handleUpdateTitle(event) {
@@ -49,60 +54,59 @@ export default function MUIEditSongModal() {
 
     return (
         <Modal
-            open={store.listMarkedForDeletion !== null}
+            open={store.currentModal === "EDIT_SONG"}
         >
             <Box sx={style}>
-            <div
-            id="edit-song-modal"
-            className="modal is-visible"
-            data-animation="slideInOutLeft">
-            <div
-                id='edit-song-root'
-                className="modal-root">
-                <div
-                    id="edit-song-modal-header"
-                    className="modal-north">Edit Song</div>
-                <div
-                    id="edit-song-modal-content"
-                    className="modal-center">
-                    <div id="title-prompt" className="modal-prompt">Title:</div>
-                    <input 
-                        id="edit-song-modal-title-textfield" 
-                        className='modal-textfield' 
-                        type="text" 
-                        defaultValue={title} 
-                        onChange={handleUpdateTitle} />
-                    <div id="artist-prompt" className="modal-prompt">Artist:</div>
-                    <input 
-                        id="edit-song-modal-artist-textfield" 
-                        className='modal-textfield' 
-                        type="text" 
-                        defaultValue={artist} 
-                        onChange={handleUpdateArtist} />
-                    <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div>
-                    <input 
-                        id="edit-song-modal-youTubeId-textfield" 
-                        className='modal-textfield' 
-                        type="text" 
-                        defaultValue={youTubeId} 
-                        onChange={handleUpdateYouTubeId} />
-                </div>
-                <div className="modal-south">
-                    <input 
-                        type="button" 
-                        id="edit-song-confirm-button" 
-                        className="modal-button" 
-                        value='Confirm' 
-                        onClick={handleConfirmEditSong} />
-                    <input 
-                        type="button" 
-                        id="edit-song-cancel-button" 
-                        className="modal-button" 
-                        value='Cancel' 
-                        onClick={handleCancelEditSong} />
-                </div>
-            </div>
-        </div>
+                <Box>
+                    <Typography variant='h4'>
+                        Edit Song
+                    </Typography>
+                </Box>
+                <hr></hr>
+                <Box component="form" noValidate onSubmit={handleConfirmEditSong}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="Title"
+                        onChange={handleUpdateTitle}
+                        defaultValue={title}
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="Artist"
+                        onChange={handleUpdateArtist}
+                        defaultValue={artist}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="youTubeId"
+                        onChange={handleUpdateYouTubeId}
+                        defaultValue={youTubeId}
+                    />
+                    <Box height={'2.5rem'}></Box>
+                    <Box>
+                        <Button
+                            type='submit'
+                            variant='contained'
+                            sx={{fontSize: '1.0rem'}}
+                        >
+                            Confirm
+                        </Button>
+                        <Button
+                            variant='contained'
+                            sx={{float: 'right', fontSize: '1.0rem'}}
+                            onClick={handleCancelEditSong}
+                        >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Box>
             </Box>
         </Modal>
     );

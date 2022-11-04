@@ -183,7 +183,7 @@ body {
 }
 
 .unselected-list-card {
-  background-color: var(--swatch-complement);
+  background-color: white;
 }
 
 .list-card-button {
